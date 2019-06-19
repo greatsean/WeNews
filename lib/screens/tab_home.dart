@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:shawn_app/widgets/article_list.dart';
 import 'package:shawn_app/data/preferences.dart';
+import 'package:dio/dio.dart';
 
 class TabHome extends StatefulWidget {
   final String title;
@@ -31,13 +32,22 @@ class _TabHomeState extends State<TabHome> {
         title: Text(widget.title),
       ),
       body: ArticleList(
+          refreshCb: loadData,
+          loadmoreCb: loadData,
           list: this
               .list), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
+  get loadingWidget {
+    return CircularProgressIndicator();
+  }
+
+  get isLoading {
+    return list.length == 0;
+  }
+
   void loadData() async {
-    CircularProgressIndicator d=CircularProgressIndicator(value: null,semanticsLabel: 'ddddd',);
     var keyword =
         await PreferencesUtil.getString(PreferencesConstants.NEWS_KEYWORD) ??
             "china";
@@ -47,19 +57,31 @@ class _TabHomeState extends State<TabHome> {
     var language =
         await PreferencesUtil.getString(PreferencesConstants.NEWS_LAN) ?? "";
 //    https://newsapi.org/v2/everything?q=India&apiKey=53ea041b1e1c4c659b41767532da63f2
-    var url = Uri.https('newsapi.org', '/v2/everything', {
+//    var url = Uri.https('newsapi.org', '/v2/everything', {
+//      'q': keyword,
+//      'apiKey': '53ea041b1e1c4c659b41767532da63f2',
+//      'pageSize': pageSize.toString(),
+//      'language': language
+//    });
+//    print(url);
+//    var req = await HttpClient().getUrl(url);
+//    var resp = await req.close();
+//    var body = await resp.transform(utf8.decoder).join();
+//    var json = jsonDecode(body);
+//    this.setState(() {
+//      list = json['articles'];
+//    });
+
+    Dio dio = Dio();
+    Response respData =
+        await dio.get('https://newsapi.org/v2/everything', queryParameters: {
       'q': keyword,
       'apiKey': '53ea041b1e1c4c659b41767532da63f2',
       'pageSize': pageSize.toString(),
       'language': language
     });
-    print(url);
-    var req = await HttpClient().getUrl(url);
-    var resp = await req.close();
-    var body = await resp.transform(utf8.decoder).join();
-    var json = jsonDecode(body);
     this.setState(() {
-      list = json['articles'];
+      list = respData.data['articles'];
     });
   }
 }

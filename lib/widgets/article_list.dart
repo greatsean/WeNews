@@ -2,23 +2,50 @@ import 'package:flutter/material.dart';
 
 import 'package:shawn_app/screens/browser.dart';
 
-class ArticleList extends StatelessWidget {
-  final list;
+class ArticleList extends StatefulWidget {
+  final List list;
+  final Function refreshCb;
+  final Function loadmoreCb;
 
-  ArticleList({Key key, this.list}) : super(key: key);
+  ArticleList({Key key, this.list, this.refreshCb, this.loadmoreCb})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _ArticelListState();
+}
+
+class _ArticelListState extends State<ArticleList> {
+  final ScrollController mContronller = new ScrollController();
+
+  @override
+  void initState() {
+    mContronller.addListener(() {
+      if (mContronller.position.maxScrollExtent ==
+          mContronller.position.pixels) {
+        print('已经滑到底部');
+        if (widget.loadmoreCb != null) widget.loadmoreCb();
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mContronller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> datas = this
-        .list
-        .map<Widget>((e) => ArticItem(
-              title: e['title'],
-              url: e['url'],
-              imgUrl: e['urlToImage'],
-              desc: e['description'],
-              date: e['publishedAt'],
-            ))
-        .toList();
+//    List<Widget> datas = widget.list
+//        .map<Widget>((e) => ArticItem(
+//              title: e['title'],
+//              url: e['url'],
+//              imgUrl: e['urlToImage'],
+//              desc: e['description'],
+//              date: e['publishedAt'],
+//            ))
+//        .toList();
 
 //    List<Widget> datas = [];
 //    this.list.forEach((e) {
@@ -30,8 +57,28 @@ class ArticleList extends StatelessWidget {
 //        date: e['publishedAt'],
 //      ));
 //    });
-    return ListView(
-      children: datas,
+
+    var datas = widget.list;
+    return RefreshIndicator(
+      child: ListView.separated(
+        itemCount: datas.length,
+        itemBuilder: (BuildContext context, int index) => ArticItem(
+              title: datas[index]['title'],
+              url: datas[index]['url'],
+              imgUrl: datas[index]['urlToImage'],
+              desc: datas[index]['description'],
+              date: datas[index]['publishedAt'],
+            ),
+        separatorBuilder: (BuildContext context, int index) => Divider(),
+        controller: mContronller,
+      ),
+      onRefresh: () async {
+        return Future.sync(() async {
+          print('下拉刷新---开始');
+          await widget.refreshCb();
+          print('下拉刷新---结束');
+        });
+      },
     );
   }
 }

@@ -17,7 +17,10 @@ class HeadlinesSiglePage extends StatefulWidget {
 class _HeadlinesSiglePageState extends State<HeadlinesSiglePage> {
   @override
   Widget build(BuildContext context) {
-    return ArticleList(list: this.list);
+    return ArticleList(
+      list: this.list,
+      refreshCb: loadData,
+    );
   }
 
   var list = [];

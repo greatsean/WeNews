@@ -48,6 +48,9 @@ class _TabSettingsState extends State<TabSettings> {
                             ? TextInputType.numberWithOptions()
                             : TextInputType.text,
                         controller: controller,
+                        decoration: InputDecoration(
+                          hintText: "请输入${title}",
+                        ),
                       )),
                   Row(
                     children: <Widget>[
@@ -60,7 +63,6 @@ class _TabSettingsState extends State<TabSettings> {
                           onPressed: () {
                             String curValue = controller.text;
                             print('input>>${curValue}');
-                            print('input>>${oldValue.runtimeType}');
 
                             isNumber
                                 ? PreferencesUtil.saveInt(
@@ -150,49 +152,75 @@ class _TabSettingsState extends State<TabSettings> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-        children: data
-            .map<Widget>((e) => SettingsItem(
-                  title: e['title'],
-                  subtitle: e['subtitle'],
-                  onPressed: e['onPressed'],
-                  ledIcon: e['ledIcon'],
-                ))
-            .toList(),
-      ),
+      body:
+
+//      ListView(
+          //方式1实现分割线
+//        children: data
+//            .map<Widget>((e) => SettingsItem(
+//                  title: e['title'],
+//                  subtitle: e['subtitle'],
+//                  onPressed: e['onPressed'],
+//                  ledIcon: e['ledIcon'],
+//                ))
+//            .toList(),
+//      方式2实现分割线
+//        children: ListTile.divideTiles(
+//                context: context,
+//                tiles: data.map<Widget>((e) => ListTile(
+//                      title: Text(e['title']),
+//                      subtitle: Text(e['subtitle']),
+//                      onTap: e['onPressed'],
+//                      leading: Icon(e['ledIcon']),
+//                    )),
+//                color: Theme.of(context).dividerColor)
+//            .toList(),
+//      )
+          //      方式3实现分割线
+          ListView.separated(
+              itemBuilder: (BuildContext context, int index) => ListTile(
+                    title: Text(data[index]['title']),
+                    subtitle: Text(data[index]['subtitle']),
+                    onTap: data[index]['onPressed'],
+                    leading: Icon(data[index]['ledIcon']),
+                  ),
+              separatorBuilder: (BuildContext context, int index) => Divider(),
+              itemCount: data.length),
     );
   }
 }
 
-class SettingsItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  IconData ledIcon;
-
-  final Function onPressed;
-
-  SettingsItem({this.title, this.onPressed, this.subtitle, this.ledIcon})
-      : super();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListTile(
-        title: Text(
-          title,
-        ),
-        subtitle: Text(
-          subtitle,
-        ),
-        onTap: onPressed,
-        trailing: Icon(Icons.arrow_forward_ios),
-        leading: Icon(ledIcon),
-      ),
-      decoration: BoxDecoration(
-          border: Border(
-              bottom:
-                  BorderSide(color: Theme.of(context).dividerColor, width: 1))),
-    );
-  }
-}
+//class SettingsItem extends StatelessWidget {
+//  final String title;
+//  final String subtitle;
+//
+//  IconData ledIcon;
+//
+//  final Function onPressed;
+//
+//  SettingsItem({this.title, this.onPressed, this.subtitle, this.ledIcon})
+//      : super();
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Container(
+//      child: ListTile(
+//        title: Text(
+//          title,
+//        ),
+//        subtitle: Text(
+//          subtitle,
+//        ),
+//        onTap: onPressed,
+//        trailing: Icon(Icons.arrow_forward_ios),
+//        leading: Icon(ledIcon),
+//      ),
+//      decoration: BoxDecoration(
+//          border: Border(
+//              bottom:
+////              Divider.createBorderSide(context,
+////                  color: Theme.of(context).dividerColor, width: 1))),
+//                  BorderSide(color: Theme.of(context).dividerColor, width: 1))),
+//    );
+//  }
+//}
