@@ -1,4 +1,4 @@
-# shawn_app
+# WeNews
 
 A new Flutter application.
 
