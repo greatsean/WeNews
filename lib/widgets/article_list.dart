@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:shawn_app/screens/browser.dart';
+import 'package:WeNews/screens/browser.dart';
 
 class ArticleList extends StatefulWidget {
   final List list;

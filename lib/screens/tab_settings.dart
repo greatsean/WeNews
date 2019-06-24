@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shawn_app/data/preferences.dart';
+import 'package:WeNews/data/preferences.dart';
 
 class TabSettings extends StatefulWidget {
   final title;

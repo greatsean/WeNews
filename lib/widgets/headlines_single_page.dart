@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:io';
 import 'dart:convert';
-import 'package:shawn_app/widgets/article_list.dart';
-import 'package:shawn_app/data/preferences.dart';
+import 'package:WeNews/widgets/article_list.dart';
+import 'package:WeNews/data/preferences.dart';
 
 class HeadlinesSiglePage extends StatefulWidget {
   final String category;

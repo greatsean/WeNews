@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shawn_app/screens/tab_home.dart';
+import 'package:WeNews/screens/tab_home.dart';
 
-import 'package:shawn_app/screens/tab_top_headlines.dart';
-import 'package:shawn_app/screens/tab_settings.dart';
+import 'package:WeNews/screens/tab_top_headlines.dart';
+import 'package:WeNews/screens/tab_settings.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shawn_app/widgets/headlines_single_page.dart';
+import 'package:WeNews/widgets/headlines_single_page.dart';
 
 class TabHeadlines extends StatefulWidget {
   final String title;
